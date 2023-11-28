@@ -1,76 +1,31 @@
-const  Discord  = require("discord.js")
+const math = require('mathjs');
 
-module.exports ={ 
-name:'calculator',
-async execute(message,args){
-let number1 = Number(args[0])
-let number2 = Number(args[2])
+const Discord = require('discord.js');
 
-
-if(args[1] === '*'){
-const result = number1 * number2
-const msg = await message.channel.send('Calculating...')
-const embed = new Discord.MessageEmbed()
-
-.setColor('03fccf')
-   .setTitle('Calculator')
-   .setDescription(`The result is ${result}!`)
-.setFooter('Kenobi Bot®')
-.setImage('https://media.giphy.com/media/VIbp98GiJdGnnTDE4f/giphy.gif')
-
-msg.delete()
-   
-message.channel.send(embed)
-
-}else if(args[1] === '+'){
-
-    const result = number1 + number2
-    const msg = await message.channel.send('Calculating...')
-    const embed = new Discord.MessageEmbed()
-    
-    .setColor('03fccf')
-       .setTitle('Calculator')
-       .setDescription(`The result is ${result}!`)
-    .setFooter('Kenobi Bot®')
-    .setImage('https://media.giphy.com/media/VIbp98GiJdGnnTDE4f/giphy.gif')
-
-    msg.delete()
-       
-    message.channel.send(embed)
-
-}else if(args[1] ==='-'){
- const result = number1 - number2
-const msg = await message.channel.send('Calculating...')
-const embed = new Discord.MessageEmbed()
-
-.setColor('03fccf')
-   .setTitle('Calculator')
-   .setDescription(`The result is ${result}!`)
-.setFooter('Kenobi Bot®')
-.setImage('https://media.giphy.com/media/VIbp98GiJdGnnTDE4f/giphy.gif')
-
-msg.delete()
-   
-message.channel.send(embed)
+module.exports = {
+    name: "calculator",
+    description: "Get the answer to a math problem",
 
 
-}else if(args[1]==='/'){
-const result = number1 / number2
+execute (message, args){
 
+        if(!args[0]) return message.channel.send('Please provide a question');
 
-const msg = await message.channel.send('Calculating...')
-const embed = new Discord.MessageEmbed()
+        let resp;
 
-.setColor('03fccf')
-.setTitle('Calculator')
-.setDescription(`The result is ${result}!`)
-.setFooter('Kenobi Bot®')
-.setImage('https://media.giphy.com/media/VIbp98GiJdGnnTDE4f/giphy.gif')
-msg.delete()
-   
-message.channel.send(embed)
+        try {
+            resp = math.evaluate(args.join(" "))
+        } catch (e) {
+            return message.channel.send('Please provide a **valid** question')
+        }
 
-}
+        const embed = new Discord.MessageEmbed()
+        .setColor(0x808080)
+        .setTitle('Calculator')
+        .addField('Question', `\`\`\`css\n${args.join(' ')}\`\`\``)
+        .addField('Answer', `\`\`\`css\n${resp}\`\`\``)
 
-}
+        message.channel.send(embed);
+
+    }
 }
